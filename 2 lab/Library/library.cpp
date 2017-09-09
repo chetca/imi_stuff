@@ -44,38 +44,42 @@ void Library::add() {
 }
 
 void Library::remove() {
-
-}
-
-void Library::print_surname() {
+    std::cout << "Enter the name of the book to be deleted" << std::endl;
+    std::string tmp;
+    std::cin >> tmp;
     for(auto i = book.begin(); i != book.end(); i++) {
-        std::cout << (*i) << std::endl;
+        if(i->Name == tmp) {
+            book.erase(i);
+            std::cout << "Done" << std::endl;
+        }
     }
 
 }
 
-void Library::print_year() {
+void Library::print_surname() {
+    std::sort(book.begin(), book.end(), [](const Book&a, const Book&b) {
+        if (a.Author == b.Author) {
+            return a.Name < b.Name;
+        }
+        return a.Author < b.Author;
+    });
+    for(auto i = book.begin(); i != book.end(); i++) {
+        std::cout << (*i) << std::endl;
+    }
+}
 
+void Library::print_year() {
+    std::sort(book.begin(), book.end(), [](const Book&a, const Book&b) {
+        return a.Year < b.Year;
+    });
+    for(auto i = book.begin(); i != book.end(); i++) {
+        std::cout << (*i) << std::endl;
+    }
 }
 
 std::ostream& operator<<(std::ostream& os, const Book& bk)
 {
-    os << bk.Author << " " << bk.Name << " " << bk.Year << bk.Sum;
+    os << bk.Author << " " << bk.Name << " " << bk.Year << " " << bk.Sum;
     return os;
 }
 
-//bool Library::Compare(const std::string &left, const std::string &right) {
-//        for (auto i = left, j = right; i < left.length(), j < right.length(); i++, j++){
-//            if (left[i] < right[j])
-//                return true;
-//            if (left[i] > right[j])
-//                return false;
-//            if ((i + 1 == left.length()) && (j + 1 < right.length()))
-//                return true;
-//            if ((i + 1 < left.length()) && (j + 1 == right.length()))
-//                return false;
-//            if ((i + 1 == left.length()) && (j + 1 == right.length()))
-//                return true;
-//        }
-//        return true;
-//}
