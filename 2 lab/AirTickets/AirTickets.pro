@@ -4,9 +4,9 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    request.cpp \
-    date.cpp \
     airtickets.cpp
 
 HEADERS += \
-    airtickets.h
+    airtickets.h \
+    date.h \
+    request.h

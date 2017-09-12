@@ -86,20 +86,10 @@ void AirTickets::print_place()
 
 void AirTickets::print_date()
 {
-    std::multimap<Date, RequestDes> requestDate;
-    RequestDes temp;
-    Date tempD;
     for(auto it = request.begin(); it != request.end(); it++) {
-        tempD = it->second.day;
-        temp.Destination = it->first;
-        temp.Name = it->second.Name;
-        temp.Number = it->second.Number;
-        requestDate.insert(std::pair<Date, RequestDes>(tempD, temp));
-    }
-
-    for(auto it = requestDate.begin(); it != requestDate.end(); it++) {
         std::cout << it->first << " " << it->second << std::endl;
     }
+
 }
 
 

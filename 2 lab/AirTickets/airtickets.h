@@ -1,7 +1,7 @@
 #ifndef AIRTICKETS_H
 #define AIRTICKETS_H
 
-#include "request.cpp"
+#include "request.h"
 #include <iostream>
 #include <string>
 #include <map>
@@ -12,6 +12,7 @@ class AirTickets
 {
 private:
     std::multimap<std::string, Request> request;
+    //std::multimap<std::string, Request> request;
 public:
     AirTickets();
 
