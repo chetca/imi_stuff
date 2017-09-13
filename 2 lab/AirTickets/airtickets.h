@@ -12,14 +12,12 @@ class AirTickets
 {
 private:
     std::multimap<std::string, Request> request;
-    //std::multimap<std::string, Request> request;
 public:
     AirTickets();
 
     void add();
     void remove();
     void output_num();
-    void output_date();
     void print_place();
     void print_date();
 };

@@ -2,16 +2,35 @@
 
 AirTickets::AirTickets()
 {
+    Request tmp1, tmp2, tmp3;
+    tmp1.Number = 815;
+    tmp1.day.d = 11;
+    tmp1.day.m = 04;
+    tmp1.day.y = 2004;
+    tmp1.Name = "Jack Shepard";
+    tmp2.Number = 815;
+    tmp2.day.d = 11;
+    tmp2.day.m = 04;
+    tmp2.day.y = 2004;
+    tmp2.Name = "Kate Austen";
+    tmp3.Number = 411;
+    tmp3.day.d = 11;
+    tmp3.day.m = 04;
+    tmp3.day.y = 2004;
+    tmp3.Name = "James Ford";
+    request = {{"Los Angeles", tmp1},
+               {"Las Vegas", tmp2},
+               {"Los Santos", tmp3}};
+
     std::cout << "Welcome to the " <<
                  "programm from Air Tickets!" << std::endl;
 
     std::cout << "Please, enter a number: " << std::endl;
     std::cout << "1 from added air ticket order " << std::endl;
     std::cout << "2 from remove order " << std::endl;
-    std::cout << "3 from withdrawal of an order by number " << std::endl;
-    std::cout << "4 from withdrawal of an order by the date " << std::endl;
-    std::cout << "5 from print all orders by destination " << std::endl;
-    std::cout << "6 from print all orders by date " << std::endl;
+    std::cout << "3 from withdrawal of an order by number and date " << std::endl;
+    std::cout << "4 from print all orders by destination " << std::endl;
+    std::cout << "5 from print all orders by date " << std::endl;
     int tmp;
     while(true) {
         std::cout << ">: ";
@@ -27,12 +46,9 @@ AirTickets::AirTickets()
             output_num();
             break;
         case 4:
-            output_date();
-            break;
-        case 5:
             print_place();
             break;
-        case 6:
+        case 5:
             print_date();
             break;
         default:
@@ -63,17 +79,47 @@ void AirTickets::add()
 
 void AirTickets::remove()
 {
-
+    std::cout << "Enter the name of the passenger " << std::endl;
+    std::string Tmp;
+    Date tmp;
+    char c;
+    while(std::cin >> c) {
+        if(c == '\n') break;
+        Tmp += c;
+    }
+    std::cout << "Enter the departure date:" << std::endl;
+    std::cout << "day - ";
+    std::cin >> tmp.d;
+    std::cout << "month - ";
+    std::cin >> tmp.m;
+    std::cout << "year - ";
+    std::cin >> tmp.y;
+    for(auto it = request.begin(); it != request.end(); it++) {
+        if(it->second.Name == Tmp && it->second.day == tmp) {
+            request.erase(it);
+            std::cout << "Done" << std::endl;
+        }
+    }
 }
 
 void AirTickets::output_num()
 {
-
-}
-
-void AirTickets::output_date()
-{
-
+    std::cout << "Enter the flight number " << std::endl;
+    int Tmp;
+    Date tmp;
+    std::cin >> Tmp;
+    std::cout << "Enter the departure date:" << std::endl;
+    std::cout << "day - ";
+    std::cin >> tmp.d;
+    std::cout << "month - ";
+    std::cin >> tmp.m;
+    std::cout << "year - ";
+    std::cin >> tmp.y;
+    for(auto it = request.begin(); it != request.end(); it++) {
+        if(it->second.Number == Tmp && it->second.day == tmp) {
+            std::cout << it->first << " " << it->second << std::endl;
+        }
+    }
 }
 
 void AirTickets::print_place()
