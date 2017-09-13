@@ -2,9 +2,9 @@
 #include <string>
 
 struct Request {
+    Date day;
     int Number;
     std::string Name;
-    Date day;
 
     friend std::ostream& operator<<(std::ostream& os, const Request& rk);
 };
