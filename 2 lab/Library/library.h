@@ -1,7 +1,7 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
-#include "book.cpp"
+#include "book.h"
 #include <iostream>
 #include <string>
 #include <vector>

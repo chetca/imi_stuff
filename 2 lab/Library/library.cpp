@@ -1,9 +1,13 @@
 #include "library.h"
 
 Library::Library() {
+    book = {{"Pushkin", "Kapitanskaya dochka", 2004, 16},
+            {"Lermontov", "Demon", 2010, 20},
+            {"Tolstoy", "Voyna i mir", 2008, 18},
+            {"Dostoevsky", "Idiot", 2016, 4}};
+
     std::cout << "Welcome to the Super-Puper " <<
                  "programm from Library!" << std::endl;
-
     std::cout << "Please, enter a number: " << std::endl;
     std::cout << "1 from added book " << std::endl;
     std::cout << "2 from remove book " << std::endl;
@@ -63,8 +67,8 @@ void Library::print_surname() {
         }
         return a.Author < b.Author;
     });
-    for(auto i = book.begin(); i != book.end(); i++) {
-        std::cout << (*i) << std::endl;
+    for(auto i : book) {
+        std::cout << i << std::endl;
     }
 }
 
@@ -72,8 +76,8 @@ void Library::print_year() {
     std::sort(book.begin(), book.end(), [](const Book&a, const Book&b) {
         return a.Year < b.Year;
     });
-    for(auto i = book.begin(); i != book.end(); i++) {
-        std::cout << (*i) << std::endl;
+    for(auto i : book) {
+        std::cout << i << std::endl;
     }
 }
 

@@ -9,12 +9,12 @@ AirTickets::AirTickets()
     tmp1.day.y = 2004;
     tmp1.Name = "Shepard";
     tmp2.Number = 815;
-    tmp2.day.d = 11;
+    tmp2.day.d = 15;
     tmp2.day.m = 04;
     tmp2.day.y = 2004;
     tmp2.Name = "Austen";
     tmp3.Number = 411;
-    tmp3.day.d = 11;
+    tmp3.day.d = 5;
     tmp3.day.m = 04;
     tmp3.day.y = 2004;
     tmp3.Name = "Ford";
@@ -123,19 +123,23 @@ void AirTickets::print_place()
     for(auto it = request.begin(); it != request.end(); it++) {
         std::cout << it->first << " " << it->second << std::endl;
     }
-
 }
 
 void AirTickets::print_date()
 {
-    std::vector<std::pair<Request, std::string > > vec(request.begin(), request.end());
-    std::sort(vec.begin(), vec.end(), [](const std::pair<Request, std::string > &a, const std::pair<Request, std::string > &b) {
-        return a.first.day < b.first.day;
+    std::vector<std::pair<std::string, Request> > vec;
+    for(auto it = request.begin(); it != request.end(); it++) {
+        std::pair<std::string, Request> tmp;
+        tmp.first = it->first;
+        tmp.second = it->second;
+        vec.push_back(tmp);
+    }
+    std::sort(vec.begin(), vec.end(), [](const std::pair<std::string, Request> &a, const std::pair<std::string, Request> &b) {
+        return a.second.day < b.second.day;
     });
     for(auto it : vec) {
         std::cout << it.first << " " << it.second << std::endl;
     }
-
 }
 
 
