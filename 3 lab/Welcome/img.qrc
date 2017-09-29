@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file alias="icon">if_Duckling_54510.ico</file>
+        <file alias="logo">pc-icon-9.png</file>
+    </qresource>
+    <qresource prefix="/screen">
+        <file alias="screen">maxresdefault.jpg</file>
+    </qresource>
+</RCC>
