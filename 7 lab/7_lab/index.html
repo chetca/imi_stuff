@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>I Learn Vue.js</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron mt-3 text-center">
+            <!-- Вьюха приложения -->
+            <div id="app">
+                <div class="first_point" style="border-bottom: 1px grey">
+                    <input type="checkbox" id="checkbox_1" v-model="checkbox_1">
+                    <span>&&</span>
+                    <input type="checkbox" id="checkbox_2" v-model="checkbox_2">
+                    <p style="color: #005f00; " v-if="checkbox_1 && checkbox_2">true</p>
+                    <p style="color: #af0000" v-else>false</p>
+                </div>
+                <div class="second_point">
+                    <p>{{ count }}</p>
+                    <input type="range" min="1" max="5" step="1" defaultValue="1" v-model="count">
+                    <div>
+                        <span v-for="n in total">
+                            <img v-if="n <= count" :src="src_alt">
+                            <img v-else :src="src">
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- Конец вьюхи -->
+        </div>
+    </div>
+
+    <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">ИМИ БГУ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Главная </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Ссылки</a>
+                </li>
+                <li class="nav-item dropup">
+                    <a class="nav-link dropdown-toggle" href="https://getbootstrap.com" id="dropdown10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Другие лабы</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown10">
+                        <a class="dropdown-item" href="#">Лаба 1</a>
+                        <a class="dropdown-item" href="#">Лаба 2</a>
+                        <a class="dropdown-item" href="#">Лаба 3</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                checkbox_1: false,
+                checkbox_2: false,
+                count: 1,
+                total: 5,
+                src: 'star_grey.png',
+                src_alt: 'star_green.png'
+            }
+        })
+    </script>
+</body>
+
+</html>
