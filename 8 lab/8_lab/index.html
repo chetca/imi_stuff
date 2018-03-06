@@ -58,12 +58,22 @@
                             <input type="text" placeholder="Примечание" class="form-control" id="note" v-model="newTodoNote" v-on:keyup.enter="addNewTodo">
                         </div>
                         <div class="todo-btn">
-                            <button class="btn btn-success btn-block" v-on:click="addNewTodo"><label>Добавить</label></button>
+                            <button class="btn btn-success btn-block" v-on:click="addNewTodo">
+                                <label>Добавить</label>
+                            </button>
                         </div>
                     </fieldset>
                     <div class="todo-items">
-                        <div is="todo-item" v-for="(todo, index) in todos" v-bind:key="todo.id" v-bind:title="todo.title" v-bind:note="todo.note" v-on:remove="todos.splice(index, 1)" v-on:edit="todos.splice(index, 1)"></div>
-                        <!-- https://ru.vuejs.org/v2/guide/list.html#%D0%97%D0%B0%D0%BC%D0%B5%D0%BD%D1%8B-%D0%B2-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B5 -->
+                        <div is="todo-item" v-for="(todo, index) in todos" 
+                             v-bind:index="todo.id" 
+                             v-bind:title="todo.title" 
+                             v-bind:note="todo.note" 
+                             v-on:remove="todos.splice(index, 1)"
+                             v-on:edit="edit">
+                        </div>
+                        <!-- https://ru.vuejs.org/v2/guide/list.html#%D0%97%D0%B0%D0%BC%D0%B5%D0%BD%D1%8B-%D0%B2-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B5 
+                        https://tehnojam.pro/category/development/sozdanie-spiska-zadach-s-vue_js.html
+                        https://ru.vuejs.org/v2/guide/computed.html -->
                     </div>
                 </div>
                 <!-- Конец вьюхи -->
@@ -99,17 +109,21 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
         Vue.component('todo-item', {
-            template: '\
-        <div class="todo-item-elem">\
-            <h4 class="zero-margin">{{ title }}</h4>\
-            <small class="text-muted">{{ note }}</small>\
-            <div class="text-right">\
-                <i class="fa fa-pencil-square-o cur_btn" aria-hidden="true" v-on:click="$emit(\'edit\')"></i>\
-                <i class="fa fa-trash cur_btn" aria-hidden="true" v-on:click="$emit(\'remove\')"></i>\
-            </div>\
-        </div>\
-  ',
-            props: ['title', 'note']
+            props: ['index', 'title', 'note'],
+            methods: {
+                todoEdit: function(index) {
+                    this.$emit('edit', index);
+                }
+            },
+            template: '<div class="todo-item-elem">\
+                            <h4 class="zero-margin">{{ title }}</h4>\
+                            <small class="text-muted">{{ note }}</small>\
+                            <div class="text-right">\
+                                <i class="fa fa-pencil-square-o cur_btn" aria-hidden="true" v-on:click="todoEdit(index)"></i>\
+                                <i class="fa fa-trash cur_btn" aria-hidden="true" v-on:click="$emit(\'remove\')"></i>\
+                            </div>\
+                        </div>\ ',
+            
         })
 
         new Vue({
@@ -118,11 +132,11 @@
                 newTodoTitle: '',
                 newTodoNote: '',
                 todos: [{
-                    id: 1,
+                    id: 0,
                     title: 'Todo B',
                     note: 'Project B'
                 }],
-                nextTodoId: 2
+                nextTodoId: 1
             },
             methods: {
                 addNewTodo: function() {
@@ -134,12 +148,10 @@
                     this.newTodoTitle = '';
                     this.newTodoNote = '';
                 },
-                todo_edit: function(id) {
-                    this.newTodoTitle = todos[id].title;
-                    this.newTodoNote = todos[id].note;
-                },
-                say: function(message) {
-                    alert(message)
+                edit: function(id) {
+                    //alert('Заголовок: ' + this.todos[id].title);
+                    this.newTodoTitle = this.todos[id].title;
+                    this.newTodoNote = this.todos[id].note;
                 }
             }
         })
