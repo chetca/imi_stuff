@@ -42,7 +42,12 @@
         }
 
     </style>
+
+
+
 </head>
+
+
 
 <body>
     <div class="container">
@@ -64,11 +69,12 @@
                         </div>
                     </fieldset>
                     <div class="todo-items">
-                        <div is="todo-item" v-for="(todo, index) in todos" 
+                        <div is="todo-item" 
+                             v-for="(todo, index) in todos" 
                              v-bind:index="todo.id" 
                              v-bind:title="todo.title" 
                              v-bind:note="todo.note" 
-                             v-on:remove="todos.splice(index, 1)"
+                             v-on:remove="todos.splice(index, 1)" 
                              v-on:edit="edit">
                         </div>
                         <!-- https://ru.vuejs.org/v2/guide/list.html#%D0%97%D0%B0%D0%BC%D0%B5%D0%BD%D1%8B-%D0%B2-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B5 
@@ -106,7 +112,37 @@
         </div>
     </nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+
+    <script type="text/x-template" id="todo-template">
+        <div class="todo-item-elem">
+            <div class="content" v-show="!isEditing">
+                <h4 class="zero-margin">{{ todo.title }}</h4>
+                <small class="text-muted">{{ todo.note }}</small>
+                <div class="text-right">
+                    <i class="fa fa-pencil-square-o cur_btn" aria-hidden="true" v-on:click="showForm"></i>
+                    <i class="fa fa-trash cur_btn" aria-hidden="true" v-on:click="$emit('remove')"></i>
+                </div>
+            </div>
+            <!-- Редактирование -->
+            <div class="content" v-show="isEditing">
+                <div class='ui form'>
+                    <div class='field'>
+                        <label>Заметка</label>
+                        <input type='text' v-model="todo.title">
+                    </div>
+                    <div class='field'>
+                        <label>Примечание</label>
+                        <input type='text' v-model="todo.note">
+                    </div>
+                    <div class='ui two button attached buttons'>
+                        <button class='ui basic blue button' v-on:click="hideForm"> Закрыть X </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
     <script>
         Vue.component('todo-item', {
             props: ['index', 'title', 'note'],
@@ -115,26 +151,20 @@
                     this.$emit('edit', index);
                 }
             },
-            template: '<div class="todo-item-elem">\
-                            <h4 class="zero-margin">{{ title }}</h4>\
-                            <small class="text-muted">{{ note }}</small>\
-                            <div class="text-right">\
-                                <i class="fa fa-pencil-square-o cur_btn" aria-hidden="true" v-on:click="todoEdit(index)"></i>\
-                                <i class="fa fa-trash cur_btn" aria-hidden="true" v-on:click="$emit(\'remove\')"></i>\
-                            </div>\
-                        </div>\ ',
-            
+            template: '#todo-template'
         })
 
         new Vue({
             el: '#todo-list-example',
             data: {
+                isEditing: false,
                 newTodoTitle: '',
                 newTodoNote: '',
                 todos: [{
                     id: 0,
                     title: 'Todo B',
-                    note: 'Project B'
+                    note: 'Project B',
+                    isEdit: false
                 }],
                 nextTodoId: 1
             },
@@ -143,10 +173,17 @@
                     this.todos.push({
                         id: this.nextTodoId++,
                         title: this.newTodoTitle,
-                        note: this.newTodoNote
+                        note: this.newTodoNote,
+                        isEdit: false
                     })
                     this.newTodoTitle = '';
                     this.newTodoNote = '';
+                },
+                showForm() {
+                    this.isEditing = true;
+                },
+                hideForm() {
+                    this.isEditing = false;
                 },
                 edit: function(id) {
                     //alert('Заголовок: ' + this.todos[id].title);
@@ -157,6 +194,7 @@
         })
 
     </script>
+
 </body>
 
 </html>
