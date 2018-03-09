@@ -69,13 +69,14 @@
                         </div>
                     </fieldset>
                     <div class="todo-items">
-                        <div is="todo-item" 
-                             v-for="(todo, index) in todos" 
+                        <div is="todo-item" v-for="(todo, index) in todos" 
                              v-bind:index="todo.id" 
                              v-bind:title="todo.title" 
                              v-bind:note="todo.note" 
-                             v-on:remove="todos.splice(index, 1)" 
-                             v-on:edit="edit">
+                             v-bind:isEdit="todo.isEdit" 
+                             v-on:remove="todos.splice(index, 1)"
+                             v-on:show="show"
+                             v-on:hide="hide">
                         </div>
                         <!-- https://ru.vuejs.org/v2/guide/list.html#%D0%97%D0%B0%D0%BC%D0%B5%D0%BD%D1%8B-%D0%B2-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B5 
                         https://tehnojam.pro/category/development/sozdanie-spiska-zadach-s-vue_js.html
@@ -112,52 +113,50 @@
         </div>
     </nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script type="text/x-template" id="todo-template">
-        <div class="todo-item-elem">
-            <div class="content" v-show="!isEditing">
-                <h4 class="zero-margin">{{ todo.title }}</h4>
-                <small class="text-muted">{{ todo.note }}</small>
-                <div class="text-right">
-                    <i class="fa fa-pencil-square-o cur_btn" aria-hidden="true" v-on:click="showForm"></i>
-                    <i class="fa fa-trash cur_btn" aria-hidden="true" v-on:click="$emit('remove')"></i>
-                </div>
-            </div>
-            <!-- Редактирование -->
-            <div class="content" v-show="isEditing">
-                <div class='ui form'>
-                    <div class='field'>
-                        <label>Заметка</label>
-                        <input type='text' v-model="todo.title">
-                    </div>
-                    <div class='field'>
-                        <label>Примечание</label>
-                        <input type='text' v-model="todo.note">
-                    </div>
-                    <div class='ui two button attached buttons'>
-                        <button class='ui basic blue button' v-on:click="hideForm"> Закрыть X </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
     </script>
-
     <script>
         Vue.component('todo-item', {
-            props: ['index', 'title', 'note'],
+            props: ['index', 'title', 'note', 'isEdit'],
             methods: {
-                todoEdit: function(index) {
-                    this.$emit('edit', index);
+                showForm: function(index) {
+                    //alert('Во внутреннюю функцию зашёл, индекс: ' + index);
+                    this.$emit('show', index);
+                },
+                hideForm: function(index) {
+                    this.$emit('hide', index);
                 }
             },
-            template: '#todo-template'
+            template: ' \
+            <div class="todo-item-elem">\
+                <div class="content" v-show="!isEdit">\
+                    <h4 class="zero-margin">{{ title }}</h4>\
+                    <small class="text-muted">{{ note }}</small>\
+                    <div class="text-right">\
+                        <i class="fa fa-pencil-square-o cur_btn" aria-hidden="true" v-on:click="showForm(index)"></i>\
+                        <i class="fa fa-trash cur_btn" aria-hidden="true" v-on:click="$emit(\'remove\')"></i>\
+                    </div>\
+                </div>\
+                <div class="content" v-show="isEdit">\
+                    <div class="ui form">\
+                        <div class="field">\
+                            <label>Заметка</label>\
+                            <input class="form-control" type="text" v-model="title">\
+                            <label>Примечание</label>\
+                            <input class="form-control" type="text" v-model="note">\
+                        </div>\
+                        <div class="todo-btn">\
+                            <button class="btn btn-danger btn-block" v-on:click="hideForm(index)"> Закрыть X </button>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>',            
         })
-
         new Vue({
             el: '#todo-list-example',
             data: {
-                isEditing: false,
                 newTodoTitle: '',
                 newTodoNote: '',
                 todos: [{
@@ -178,23 +177,20 @@
                     })
                     this.newTodoTitle = '';
                     this.newTodoNote = '';
+                    //alert(this.todos[this.nextTodoId-1].isEdit);
                 },
-                showForm() {
-                    this.isEditing = true;
+                show: function(index) {
+                    alert('Вошёл во внешнюю функцию');
+                    //alert(this.todos[index].isEdit);
+                    this.todos[index].isEdit = true;
+                    alert(this.todos[index].isEdit);
                 },
-                hideForm() {
-                    this.isEditing = false;
-                },
-                edit: function(id) {
-                    //alert('Заголовок: ' + this.todos[id].title);
-                    this.newTodoTitle = this.todos[id].title;
-                    this.newTodoNote = this.todos[id].note;
+                hide: function(index) {
+                    this.todos[index].isEdit = false;
                 }
             }
         })
-
     </script>
-
 </body>
 
 </html>
