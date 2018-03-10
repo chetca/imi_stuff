@@ -47,8 +47,6 @@
 
 </head>
 
-
-
 <body>
     <div class="container">
         <div class="jumbotron mt-3">
@@ -58,9 +56,9 @@
                     <fieldset class="form-group">
                         <div class="todo-input">
                             <label for="name">Заметка</label>
-                            <input type="text" placeholder="Название" class="form-control" id="name" v-model="newTodoTitle">
+                            <input type="text" placeholder="Название" class="form-control" id="name" v-model="newTodoTitle" required>
                             <label for="note">Примечание</label>
-                            <input type="text" placeholder="Примечание" class="form-control" id="note" v-model="newTodoNote" v-on:keyup.enter="addNewTodo">
+                            <input type="text" placeholder="Примечание" class="form-control" id="note" v-model="newTodoNote" v-on:keyup.enter="addNewTodo" required>
                         </div>
                         <div class="todo-btn">
                             <button class="btn btn-success btn-block" v-on:click="addNewTodo">
@@ -70,13 +68,14 @@
                     </fieldset>
                     <div class="todo-items">
                         <div is="todo-item" v-for="(todo, index) in todos" 
-                             v-bind:index="todo.id" 
-                             v-bind:title="todo.title" 
-                             v-bind:note="todo.note" 
-                             v-bind:isEdit="todo.isEdit" 
-                             v-on:remove="todos.splice(index, 1)"
-                             v-on:show="show"
-                             v-on:hide="hide">
+                            v-bind:index="todo.id" 
+                            v-bind:title="todo.title" 
+                            v-bind:note="todo.note" 
+                            v-bind:isedit="todo.isedit" 
+                            v-on:remove="todos.splice(index, 1)"
+                            v-on:show="show"
+                            v-on:hide="hide">
+                            <!-- Место, куда вставятся все -->
                         </div>
                         <!-- https://ru.vuejs.org/v2/guide/list.html#%D0%97%D0%B0%D0%BC%D0%B5%D0%BD%D1%8B-%D0%B2-%D0%BC%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D0%B5 
                         https://tehnojam.pro/category/development/sozdanie-spiska-zadach-s-vue_js.html
@@ -114,24 +113,21 @@
     </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script type="text/x-template" id="todo-template">
-       
-    </script>
     <script>
         Vue.component('todo-item', {
-            props: ['index', 'title', 'note', 'isEdit'],
+            props: ['index', 'title', 'note', 'isedit'],
             methods: {
                 showForm: function(index) {
                     //alert('Во внутреннюю функцию зашёл, индекс: ' + index);
                     this.$emit('show', index);
                 },
-                hideForm: function(index) {
-                    this.$emit('hide', index);
+                hideForm: function(index, title, note) {
+                    this.$emit('hide', index, title, note);
                 }
             },
             template: ' \
             <div class="todo-item-elem">\
-                <div class="content" v-show="!isEdit">\
+                <div class="content" v-show="!isedit">\
                     <h4 class="zero-margin">{{ title }}</h4>\
                     <small class="text-muted">{{ note }}</small>\
                     <div class="text-right">\
@@ -139,7 +135,7 @@
                         <i class="fa fa-trash cur_btn" aria-hidden="true" v-on:click="$emit(\'remove\')"></i>\
                     </div>\
                 </div>\
-                <div class="content" v-show="isEdit">\
+                <div class="content" v-show="isedit">\
                     <div class="ui form">\
                         <div class="field">\
                             <label>Заметка</label>\
@@ -148,7 +144,9 @@
                             <input class="form-control" type="text" v-model="note">\
                         </div>\
                         <div class="todo-btn">\
-                            <button class="btn btn-danger btn-block" v-on:click="hideForm(index)"> Закрыть X </button>\
+                            <button class="btn btn-danger btn-block" v-on:click="hideForm(index, title, note)"> \
+                                <label>Закрыть</label> \
+                            </button>\
                         </div>\
                     </div>\
                 </div>\
@@ -163,30 +161,45 @@
                     id: 0,
                     title: 'Todo B',
                     note: 'Project B',
-                    isEdit: false
+                    isedit: false
                 }],
                 nextTodoId: 1
             },
             methods: {
                 addNewTodo: function() {
-                    this.todos.push({
-                        id: this.nextTodoId++,
-                        title: this.newTodoTitle,
-                        note: this.newTodoNote,
-                        isEdit: false
-                    })
-                    this.newTodoTitle = '';
-                    this.newTodoNote = '';
-                    //alert(this.todos[this.nextTodoId-1].isEdit);
+                    if(this.newTodoTitle != '' && this.newTodoNote != '') {
+                        this.todos.push({
+                            id: this.nextTodoId++,
+                            title: this.newTodoTitle,
+                            note: this.newTodoNote,
+                            isedit: false
+                        })
+                        this.newTodoTitle = '';
+                        this.newTodoNote = '';
+                        //alert(this.todos[this.nextTodoId-1].isedit);
+                    } 
+                    else {
+                        alert('Пожалуйста, заполните поля');
+                    }
                 },
                 show: function(index) {
-                    alert('Вошёл во внешнюю функцию');
-                    //alert(this.todos[index].isEdit);
-                    this.todos[index].isEdit = true;
-                    alert(this.todos[index].isEdit);
+                    //this.todos[index].isedit = true;
+                    for (let key in this.todos) {
+                        //console.log(this.todos[key]);
+                        if(this.todos[key].id == index) {
+                            this.todos[key].isedit = true;
+                        }
+                    }
                 },
-                hide: function(index) {
-                    this.todos[index].isEdit = false;
+                hide: function(index, title, note) {
+                    for (let key in this.todos) {
+                        //console.log(this.todos[key]);
+                        if(this.todos[key].id == index) {
+                            this.todos[key].isedit = false;
+                            this.todos[key].title = title;
+                            this.todos[key].note = note;
+                        }
+                    }
                 }
             }
         })
